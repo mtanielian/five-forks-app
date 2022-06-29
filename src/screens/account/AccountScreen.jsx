@@ -1,10 +1,9 @@
 import { View, Text } from 'react-native'
+import AccountGuestScreen from './guest/AccountGuestScreen'
 
 const AccountScreen = () => {
   return (
-    <View>
-      <Text>AccountScreen</Text>
-    </View>
+    <AccountGuestScreen />
   )
 }
 

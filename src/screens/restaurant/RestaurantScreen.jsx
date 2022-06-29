@@ -1,9 +1,13 @@
 import { View, Text } from 'react-native'
+import { useSelector } from 'react-redux'
 
 const RestaurantScreen = () => {
+  const { user } = useSelector(state => state.auth)
   return (
     <View>
-      <Text>RestaurantScreen</Text>
+      <Text>
+        {JSON.stringify(user, null, 4)}
+      </Text>
     </View>
   )
 }
