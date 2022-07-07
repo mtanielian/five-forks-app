@@ -23,5 +23,9 @@ export const doLogin = (form) => async (dispatch) => {
       payload: {...form, user: 'Martin yo', token: '12345', id: '12345'}
     })
   }, 5000)
+}
+
+
+export const doRegister = (form) => async (dispatch) => {
   
 }

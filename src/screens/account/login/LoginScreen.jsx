@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ScrollView, View, Text, Image } from 'react-native'
 import { Divider, Button, Input } from 'react-native-elements'
 import { useFormik } from "formik";
@@ -23,6 +24,7 @@ const LoginScreen = () => {
   const dispatch = useDispatch()
   const { loading } = useSelector(state => state.auth)
   const navigation = useNavigation()
+  const [ showPassword, setShowPassword ] = useState(false)
   const goToRegister = () => {
     navigation.navigate('Register')
   }
@@ -57,39 +59,39 @@ const LoginScreen = () => {
             <Input
               type='email'
               placeholder='Email'
-              leftIcon={
+              rightIcon={
                 <Icon
-                name='at-outline'
-                size={16}
+                  name='at-outline'
+                  size={16}
                 />
               }
               style={{ height: 40 }}
               onChangeText={(text) => formik.setFieldValue("email", text)}
-              errorStyle={{ color: 'red' }}
               errorMessage={formik.errors.email}
             />
           </View>
           <View>
             <Input
               placeholder='Password'
-              secureTextEntry
-              leftIcon={
+              secureTextEntry={!showPassword}
+              rightIcon={
                 <Icon
-                  name='lock-closed-outline'
+                  name={ !showPassword ? 'eye-outline' : 'eye-off-outline' }
                   size={16}
+                  onPress={() => setShowPassword(prev => !prev)}
                 />
               }
               style={{ height: 40 }} 
               onChangeText={(text) => formik.setFieldValue("password", text)}
-              errorStyle={{ color: 'red' }}
               errorMessage={formik.errors.password}
             />
           </View>
           
           <Button
             title="Login"
-            buttonStyle={{marginBottom: 10, marginTop:20}}
             onPress={formik.handleSubmit}
+            buttonStyle={{ borderWidth: 2, borderColor: '#00a680', backgroundColor: '#00a680', marginBottom: 10, marginTop:20 }}
+            titleStyle={{ color: '#ffffff'}}
           />
           <Divider
             orientation="horizontal"
@@ -97,16 +99,11 @@ const LoginScreen = () => {
             style={{ marginTop: 20, marginBottom: 20, }}
           />
           <Button
-            icon={<Icon name='logo-facebook' color='white' size={20} style={{ marginRight: 15}} />}
-            title="Login with Facebook"
-            buttonStyle={{marginBottom: 10}}
-          />
-          <Button
-            buttonStyle={{ borderWidth: 2}}
+            buttonStyle={{ borderWidth: 2, borderColor: '#00a680' }}
+            titleStyle={{ color: '#00a680'}}
             title="Register"
             onPress={goToRegister}
             type="outline"
-            color="#00a680"
           />
           
         </View>

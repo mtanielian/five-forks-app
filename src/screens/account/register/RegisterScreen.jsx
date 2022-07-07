@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { Divider, Button, Input } from 'react-native-elements'
 import { useFormik } from "formik";
 import * as Yup from 'yup'; 
 import { useDispatch, useSelector } from 'react-redux';
-//import { doLogin } from '../../../actions/auth.actions';
+import { doRegister } from '../../../actions/auth.actions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons'
 
@@ -28,12 +29,22 @@ const validationSchema = Yup.object({
 }); 
 
 const RegisterScreen = () => {
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
+  const [ showPassword, setShowPassword ] = useState(false)
+  const [ showRetryPassword, setShowRetryPassword ] = useState(false)
+
+  const goToLogin = () => {
+    navigation.navigate('Login')
+  }
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     validateOnChange: false,
     onSubmit: async (formValue) => {
       console.log(formValue)
+      dispatch(doRegister(formValue))
     },
   });
 
@@ -48,11 +59,11 @@ const RegisterScreen = () => {
           marginTop: 20
         }}
       />
-      <View style={{ margin: 20, height: 600 }}>
+      <View style={{ margin: 20, height: 400 }}>
       <View>
           <Input
             placeholder='Username'
-            leftIcon={
+            rightIcon={
               <Icon
               name='person-circle-outline'
               size={16}
@@ -60,14 +71,13 @@ const RegisterScreen = () => {
             }
             style={{ height: 40 }}
             onChangeText={(text) => formik.setFieldValue('username', text)}
-            errorStyle={{ color: 'red' }}
             errorMessage={formik.errors.username}
             />
         </View>
         <View>
           <Input
             placeholder='Email'
-            leftIcon={
+            rightIcon={
               <Icon
               name='at-outline'
               size={16}
@@ -75,38 +85,38 @@ const RegisterScreen = () => {
             }
             style={{ height: 40 }}
             onChangeText={(text) => formik.setFieldValue("email", text)}
-            errorStyle={{ color: 'red' }}
             errorMessage={formik.errors.email}
           />
         </View>
         <View>
           <Input
             placeholder='Password'
-            secureTextEntry
-            leftIcon={
+            secureTextEntry={!showPassword}
+            rightIcon={
               <Icon
-              name='lock-closed-outline'
-              size={16}
+                name={ !showPassword ? 'eye-outline' : 'eye-off-outline' }
+                size={16}
+                onPress={() => setShowPassword(prev => !prev)}
               />
             }
             style={{ height: 40 }}
             onChangeText={(text) => formik.setFieldValue("password", text)}
-            errorStyle={{ color: 'red' }}
             errorMessage={formik.errors.password}
           />
         </View>
         <View>
           <Input
             placeholder='Retry Password'
-            leftIcon={
+            secureTextEntry={!showRetryPassword}
+            rightIcon={
               <Icon
-              name='lock-closed-outline'
-              size={16}
+                name={ !showRetryPassword ? 'eye-outline' : 'eye-off-outline' }
+                size={16}
+                onPress={() => setShowRetryPassword(prev => !prev)}
               />
             }
             style={{ height: 40 }}
             onChangeText={(text) => formik.setFieldValue("retryPassword", text)}
-            errorStyle={{ color: 'red' }}
             errorMessage={formik.errors.retryPassword}
           />
         </View>
@@ -118,8 +128,9 @@ const RegisterScreen = () => {
             titleStyle={{ color: '#00a680'}}
             title="Register"
             type="outline"
+            onPress={formik.handleSubmit}
           />
-          <TouchableOpacity style={{alignItems: 'flex-end' }}>
+          <TouchableOpacity style={{alignItems: 'flex-end' }} onPress={goToLogin}>
             <Text style={{color: '#00a680' }}>Alredy account?</Text>
           </TouchableOpacity>
       </View>
